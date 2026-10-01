@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ПрофиКлимат - Профессиональный монтаж кондиционеров</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            500: '#0ea5e9', // Морозно-голубой/бирюзовый
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#f97316', // Оранжевый CTA
+                            600: '#ea580c',
+                        },
+                        dark: '#0f172a' // Графитовый
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* --- КАСТОМНЫЕ CSS АНИМАЦИИ И ЭФФЕКТЫ --- */
+
+        /* 1. Эффект блика для кнопок */
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            z-index: -1;
+            animation: shine 6s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        /* 2. Плавное парение элемента (Float) */
+        .animate-float-slow {
+            animation: floatSlow 6s ease-in-out infinite;
+        }
+        @keyframes floatSlow {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* 3. Пульсация для бейджей */
+        .badge-pulse {
+            animation: pulse-soft 2s infinite;
+        }
+        @keyframes pulse-soft {
+            0% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(14, 165, 233, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
+        }
+
+        /* 4. Карточки услуг: подъем и глубокая тень при наведении */
+        .service-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            will-change: transform, box-shadow;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 30px -5px rgba(2, 132, 199, 0.1), 0 10px 15px -3px rgba(2, 132, 199, 0.05);
+            border-color: #bae6fd; /* brand-200 */
+        }
+        .service-card:hover .icon-wrapper {
+            background-color: #0ea5e9; /* brand-500 */
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        /* 5. Легкий эффект стекла (Glassmorphism) */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* 6. Плавное подчеркивание ссылок */
+        .hover-underline {
+            position: relative;
+        }
+        .hover-underline::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: currentColor;
+            transition: width 0.3s ease;
+        }
+        .hover-underline:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-800 antialiased bg-white">
+
+    <!-- Шапка (Header) -->
+    <header class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl">
+                        <i class="fa-solid fa-wind"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-dark">ПрофиКлимат</span>
+                </div>
+
+                <!-- Schedule & Badge (Desktop) -->
+                <div class="hidden md:flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    <span class="text-sm font-medium text-slate-600">Работаем с 8:00 до 22:00 без выходных</span>
+                </div>
+
+                <!-- Contacts & CTA -->
+                <div class="flex items-center gap-4 lg:gap-6">
+                    <div class="hidden lg:flex flex-col items-end">
+                        <a href="tel:+79001234567" class="text-lg font-bold text-dark hover:text-brand-600 transition">+7 (900) 123-45-67</a>
+                        <span class="text-xs text-slate-500">Звонок бесплатный</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a href="#" class="w-10 h-10 rounded-full bg-[#229ED9]/10 text-[#229ED9] flex items-center justify-center hover:bg-[#229ED9] hover:text-white transition-colors" title="Написать в Telegram">
+                            <i class="fa-brands fa-telegram text-xl"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center hover:bg-[#25D366] hover:text-white transition-colors" title="Написать в WhatsApp">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
+                        </a>
+                    </div>
+                    <button onclick="openModal('Заказать обратный звонок')" class="hidden md:block bg-dark text-white px-5 py-2.5 rounded-lg font-medium hover:bg-slate-800 transition shadow-sm">
+                        Перезвоните мне
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Floating Messengers Widget -->
+    <div class="fixed bottom-6 right-6 z-40 flex flex-col gap-3">
+        <div class="bg-white p-3 rounded-xl shadow-lg border border-slate-100 mb-2 animate-bounce hidden md:block">
+            <p class="text-xs font-medium text-slate-600 text-center">Экспресс-консультация<br>по фото помещения</p>
+        </div>
+        <a href="#" class="w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer">
+            <i class="fa-brands fa-whatsapp text-3xl"></i>
+        </a>
+        <a href="#" class="w-14 h-14 bg-[#229ED9] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform cursor-pointer">
+            <i class="fa-brands fa-telegram text-2xl relative right-[1px]"></i>
+        </a>
+    </div>
+
+    <!-- 1. ПЕРВЫЙ ЭКРАН (HERO SECTION) -->
+    <section class="pt-32 pb-16 md:pt-40 md:pb-24 overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+                <!-- Content -->
+                <div class="max-w-2xl">
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-dark tracking-tight leading-[1.1] mb-6">
+                        Профессиональный монтаж кондиционеров <span class="text-brand-600">под ключ</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-slate-600 mb-8 leading-relaxed">
+                        С гарантией 3 года и чистым бурением без пыли. Подберем оборудование под площадь и бюджет, доставим и аккуратно установим за 2,5 часа. <strong>Выезд на замер — бесплатно.</strong>
+                    </p>
+                    
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-check text-sm"></i>
+                            </div>
+                            <span class="text-slate-700 font-medium">Алмазное бурение с промышленным пылесосом</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-check text-sm"></i>
+                            </div>
+                            <span class="text-slate-700 font-medium">Официальный договор и гарантия на монтаж</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <div class="w-6 h-6 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-check text-sm"></i>
+                            </div>
+                            <span class="text-slate-700 font-medium">Штатные бригады монтажников с опытом от 7 лет</span>
+                        </li>
+                    </ul>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button onclick="openModal('Записаться на бесплатный замер')" class="btn-glow bg-accent-500 hover:bg-accent-600 text-white font-semibold py-4 px-8 rounded-xl shadow-lg shadow-accent-500/30 transition-all flex items-center justify-center gap-2 text-lg transform hover:-translate-y-1">
+                            Записаться на замер
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <a href="#pricelist" class="bg-white hover:bg-slate-50 text-dark border border-slate-200 font-semibold py-4 px-8 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 text-lg transform hover:-translate-y-1">
+                            <i class="fa-regular fa-file-pdf text-brand-500"></i>
+                            Скачать прайс-лист
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Visual/Image -->
+                <div class="relative lg:h-[600px] flex items-center justify-center animate-float-slow">
+                    <!-- Placeholder representing a clean interior with AC -->
+                    <div class="w-full h-[400px] lg:h-full rounded-2xl overflow-hidden shadow-2xl relative bg-slate-100 group">
+                        <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=800" alt="Современный интерьер с идеально установленным кондиционером" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+                        
+                        <!-- Floating Badge -->
+                        <div class="absolute bottom-6 left-6 glass-effect rounded-xl p-4 shadow-xl flex items-center gap-4 max-w-xs transition-transform duration-300 hover:scale-105">
+                            <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-medium">Сохраним ремонт</p>
+                                <p class="font-bold text-dark leading-tight">Ни пылинки после<br>завершения работ</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative background element -->
+                    <div class="absolute -z-10 top-1/2 right-0 -translate-y-1/2 translate-x-1/3 w-[600px] h-[600px] bg-brand-50 rounded-full blur-3xl opacity-50"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. О КОМПАНИИ / ПОДХОД К РАБОТЕ -->
+    <section class="py-20 bg-slate-50 border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Монтируем климат с бережным отношением к вашему ремонту</h2>
+                <p class="text-lg text-slate-600">Мы не просто вешаем блоки. Мы проектируем систему так, чтобы она работала эффективно, тихо и не портила эстетику интерьера.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-8">
+                <!-- Metrics Grid -->
+                <div class="lg:col-span-7 grid sm:grid-cols-2 gap-6">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="text-4xl font-extrabold text-brand-600 mb-2">1 200+</div>
+                        <p class="text-slate-600 font-medium leading-tight">Установлено сплит-систем за время работы</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="text-4xl font-extrabold text-dark mb-2">9 лет</div>
+                        <p class="text-slate-600 font-medium leading-tight">Успешной работы на рынке климатической техники</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-2xl mb-4">
+                            <i class="fa-solid fa-users-gear"></i>
+                        </div>
+                        <h4 class="font-bold text-dark text-lg mb-1">Своя бригада</h4>
+                        <p class="text-sm text-slate-600">Собственные мастера без привлечения сторонних субподрядчиков.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-2xl mb-4">
+                            <i class="fa-solid fa-file-contract"></i>
+                        </div>
+                        <h4 class="font-bold text-dark text-lg mb-1">Официально</h4>
+                        <p class="text-sm text-slate-600">Договор, акты выполненных работ и гарантия до 3 лет.</p>
+                    </div>
+                </div>
+
+                <!-- Engineer Quote -->
+                <div class="lg:col-span-5 bg-brand-600 rounded-2xl p-8 lg:p-10 text-white relative overflow-hidden flex flex-col justify-between shadow-xl">
+                    <div class="relative z-10">
+                        <i class="fa-solid fa-quote-left text-4xl text-brand-400/50 mb-6 block"></i>
+                        <p class="text-xl leading-relaxed font-medium mb-8">
+                            «Наш стандарт — это обязательное вакуумирование трассы, идеально ровные штробы и абсолютная чистота на объекте после ухода. Мы делаем так, как сделали бы у себя дома.»
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&q=80&w=200" alt="Алексей" class="w-14 h-14 rounded-full border-2 border-white/20 object-cover">
+                            <div>
+                                <p class="font-bold text-lg">Алексей Смирнов</p>
+                                <p class="text-brand-200 text-sm">Ведущий инженер-бригадир</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Abstract BG shape -->
+                    <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-white opacity-5 rounded-full blur-2xl"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. УСЛУГИ И ЦЕНЫ -->
+    <section class="py-20 bg-white" id="services">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Наши услуги и форматы работы</h2>
+                <p class="text-lg text-slate-600">Прозрачное ценообразование без скрытых платежей. Вы точно знаете, за что платите.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="service-card bg-white border border-slate-200 rounded-2xl p-6 flex flex-col">
+                    <div class="icon-wrapper transition-colors w-12 h-12 bg-slate-100 text-dark rounded-lg flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-wrench"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-dark mb-4 leading-snug">Стандартный монтаж сплит-системы</h3>
+                    <p class="text-sm text-slate-500 mb-6 border-b border-slate-100 pb-4">Идеально для готового ремонта. Трасса прячется в аккуратный короб.</p>
+                    
+                    <div class="flex-grow">
+                        <p class="font-semibold text-dark text-sm mb-3">Что входит в стоимость:</p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-6">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Трасса до 3 метров</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Кронштейны и крепеж</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> 1 отверстие с пылесосом</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Вакуумирование и пуск</li>
+                        </ul>
+                        <p class="font-semibold text-dark text-sm mb-3">Оплачивается отдельно:</p>
+                        <ul class="space-y-2 text-sm text-slate-500">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-minus text-slate-300 mt-1"></i> Доп. метр трассы</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-minus text-slate-300 mt-1"></i> Штробление</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 pt-4 border-t border-slate-100">
+                        <div class="text-2xl font-bold text-dark mb-2">от 12 000 ₽</div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="service-card bg-white border-2 border-brand-500 rounded-2xl p-6 flex flex-col shadow-md relative">
+                    <div class="badge-pulse absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        Популярно
+                    </div>
+                    <div class="icon-wrapper transition-colors w-12 h-12 bg-brand-100 text-brand-600 rounded-lg flex items-center justify-center text-xl mb-4 mt-2">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-dark mb-4 leading-snug">Монтаж в 2 этапа (черновой ремонт)</h3>
+                    <p class="text-sm text-slate-500 mb-6 border-b border-slate-100 pb-4">Скрытая прокладка коммуникаций в стену до чистовой отделки.</p>
+                    
+                    <div class="flex-grow">
+                        <p class="font-semibold text-dark text-sm mb-3">Что входит (1 этап):</p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-4">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Разметка трасс</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Прокладка труб (до 5м)</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Опрессовка системы</li>
+                        </ul>
+                        <p class="font-semibold text-dark text-sm mb-3">Что входит (2 этап):</p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-6">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Навеска блоков</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Вакуумирование и запуск</li>
+                        </ul>
+                        <p class="font-semibold text-dark text-sm mb-3">Оплачивается отдельно:</p>
+                        <ul class="space-y-2 text-sm text-slate-500">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-minus text-slate-300 mt-1"></i> Штробление стен (пог. м)</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 pt-4 border-t border-slate-100">
+                        <div class="text-2xl font-bold text-dark mb-2">от 15 000 ₽</div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="service-card bg-white border border-slate-200 rounded-2xl p-6 flex flex-col">
+                    <div class="icon-wrapper transition-colors w-12 h-12 bg-slate-100 text-dark rounded-lg flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-stethoscope"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-dark mb-4 leading-snug">Обслуживание и заправка</h3>
+                    <p class="text-sm text-slate-500 mb-6 border-b border-slate-100 pb-4">Чистка, диагностика неисправностей и дозаправка фреоном.</p>
+                    
+                    <div class="flex-grow">
+                        <p class="font-semibold text-dark text-sm mb-3">Что входит в ТО:</p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-6">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Чистка фильтров и теплообменника</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Промывка дренажа</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Замер давления в системе</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Антибактериальная обработка</li>
+                        </ul>
+                        <p class="font-semibold text-dark text-sm mb-3">Оплачивается отдельно:</p>
+                        <ul class="space-y-2 text-sm text-slate-500">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-minus text-slate-300 mt-1"></i> Фреон R410A / R32 (за 100г)</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-minus text-slate-300 mt-1"></i> Ремонт плат управления</li>
+                        </ul>
+                    </div>
+                    <div class="mt-8 pt-4 border-t border-slate-100">
+                        <div class="text-2xl font-bold text-dark mb-2">от 3 500 ₽</div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="service-card bg-white border border-slate-200 rounded-2xl p-6 flex flex-col">
+                    <div class="icon-wrapper transition-colors w-12 h-12 bg-slate-100 text-dark rounded-lg flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-dark mb-4 leading-snug">Подбор и продажа оборудования</h3>
+                    <p class="text-sm text-slate-500 mb-6 border-b border-slate-100 pb-4">Официальные дилеры надежных брендов. Скидки при покупке с монтажом.</p>
+                    
+                    <div class="flex-grow">
+                        <p class="font-semibold text-dark text-sm mb-3">Преимущества:</p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-6">
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Бесплатный подбор по площади</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Цены ниже маркетплейсов</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Доставка в день монтажа</li>
+                            <li class="flex items-start gap-2"><i class="fa-solid fa-check text-brand-500 mt-1"></i> Единая гарантия на технику и работу</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-600">Haier</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-600">Daikin</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-600">Royal Clima</span>
+                        </div>
+                    </div>
+                    <div class="mt-8 pt-4 border-t border-slate-100">
+                        <button onclick="openModal('Подобрать кондиционер')" class="w-full text-center text-brand-600 font-medium hover:text-brand-800 transition hover-underline">Запросить каталог</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <button onclick="openModal('Консультация по планировке')" class="btn-glow bg-dark hover:bg-slate-800 text-white font-medium py-4 px-8 rounded-xl shadow-lg transition-all inline-flex items-center gap-2 transform hover:-translate-y-1">
+                    Получить расчет стоимости для моей планировки
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. ПОРТФОЛИО И КЕЙСЫ -->
+    <section class="py-20 bg-slate-50 border-t border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-dark mb-4">Наши работы: До / В процессе / После</h2>
+                <p class="text-lg text-slate-600">Оцените аккуратность монтажа и внешний вид готовых систем на реальных объектах.</p>
+            </div>
+
+            <!-- Portfolio Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Case 1 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 group">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&q=80&w=600" alt="Скрытый монтаж" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded-full text-dark">
+                            2 этап (Чистовой)
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-bold text-lg text-dark mb-4">Инверторный Haier в гостиной</h4>
+                        <div class="grid grid-cols-2 gap-y-3 gap-x-4 text-sm mb-6">
+                            <div><span class="text-slate-500 block text-xs">Площадь:</span><span class="font-medium">35 м²</span></div>
+                            <div><span class="text-slate-500 block text-xs">Время монтажа:</span><span class="font-medium">2.5 часа</span></div>
+                            <div><span class="text-slate-500 block text-xs">Тип стен:</span><span class="font-medium">Монолит</span></div>
+                            <div><span class="text-slate-500 block text-xs">Итог. цена:</span><span class="font-bold text-brand-600">18 500 ₽</span></div>
+                        </div>
+                        <!-- Review snippet -->
+                        <div class="bg-slate-50 rounded-lg p-3 text-sm italic text-slate-600 border-l-2 border-brand-500 relative">
+                            <i class="fa-brands fa-whatsapp absolute top-3 right-3 text-[#25D366] opacity-50 text-lg"></i>
+                            «Спасибо бригаде! Проштробили очень аккуратно, пыли почти не было. Кондиционер работает бесшумно.»
+                            <span class="block mt-2 font-medium text-xs text-slate-400">— Михаил, ЖК "Северный"</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 group">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=600" alt="Монтаж на фасад" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded-full text-dark">
+                            Стандарт
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-bold text-lg text-dark mb-4">Монтаж в корзину от застройщика</h4>
+                        <div class="grid grid-cols-2 gap-y-3 gap-x-4 text-sm mb-6">
+                            <div><span class="text-slate-500 block text-xs">Площадь:</span><span class="font-medium">20 м²</span></div>
+                            <div><span class="text-slate-500 block text-xs">Время монтажа:</span><span class="font-medium">1.5 часа</span></div>
+                            <div><span class="text-slate-500 block text-xs">Доступ:</span><span class="font-medium">С лоджии</span></div>
+                            <div><span class="text-slate-500 block text-xs">Итог. цена:</span><span class="font-bold text-brand-600">14 000 ₽</span></div>
+                        </div>
+                        <!-- Review snippet -->
+                        <div class="bg-slate-50 rounded-lg p-3 text-sm italic text-slate-600 border-l-2 border-brand-500 relative">
+                            <i class="fa-brands fa-telegram absolute top-3 right-3 text-[#229ED9] opacity-50 text-lg"></i>
+                            «Быстро приехали, аккуратно завели трассу в квартиру. Внешний блок четко встал в корзину.»
+                            <span class="block mt-2 font-medium text-xs text-slate-400">— Елена, новостройка</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 group">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&q=80&w=600" alt="Черновой этап" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded-full text-dark">
+                            1 этап (Черновой)
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="font-bold text-lg text-dark mb-4">Закладка трассы в кирпичной стене</h4>
+                        <div class="grid grid-cols-2 gap-y-3 gap-x-4 text-sm mb-6">
+                            <div><span class="text-slate-500 block text-xs">Площадь:</span><span class="font-medium">50 м²</span></div>
+                            <div><span class="text-slate-500 block text-xs">Время монтажа:</span><span class="font-medium">4 часа</span></div>
+                            <div><span class="text-slate-500 block text-xs">Длина трассы:</span><span class="font-medium">6 метров</span></div>
+                            <div><span class="text-slate-500 block text-xs">Итог. цена:</span><span class="font-bold text-brand-600">22 000 ₽</span></div>
+                        </div>
+                        <!-- Review snippet -->
+                        <div class="bg-slate-50 rounded-lg p-3 text-sm italic text-slate-600 border-l-2 border-brand-500 relative">
+                            <i class="fa-brands fa-whatsapp absolute top-3 right-3 text-[#25D366] opacity-50 text-lg"></i>
+                            «Ребята профи. Проложили дренаж в канализацию с сифоном, трассу спаяли. Жду на чистовой монтаж!»
+                            <span class="block mt-2 font-medium text-xs text-slate-400">— Денис, ремонт коттеджа</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. ЭТАПЫ СОТРУДНИЧЕСТВА -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-dark mb-16 text-center">Как мы работаем: 4 простых шага</h2>
+            
+            <div class="relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden lg:block absolute top-12 left-1/2 -translate-x-1/2 w-3/4 h-0.5 bg-slate-100 z-0"></div>
+                
+                <div class="grid lg:grid-cols-4 gap-12 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="text-center relative">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-brand-100 rounded-full flex items-center justify-center text-4xl font-black text-brand-500 mb-6 shadow-sm">
+                            1
+                        </div>
+                        <h4 class="text-xl font-bold text-dark mb-3">Заявка или звонок</h4>
+                        <p class="text-slate-600 text-sm">Оставляете заявку. Мы перезваниваем в течение 10 минут, проводим экспресс-консультацию.</p>
+                        <!-- Arrow for Mobile -->
+                        <div class="lg:hidden text-slate-300 mt-6"><i class="fa-solid fa-arrow-down text-2xl"></i></div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="text-center relative">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-brand-100 rounded-full flex items-center justify-center text-4xl font-black text-brand-500 mb-6 shadow-sm">
+                            2
+                        </div>
+                        <h4 class="text-xl font-bold text-dark mb-3">Выезд и замер</h4>
+                        <p class="text-slate-600 text-sm">Инженер приезжает бесплатно. Подбирает место, оборудование и составляет твердую смету.</p>
+                        <!-- Arrow for Mobile -->
+                        <div class="lg:hidden text-slate-300 mt-6"><i class="fa-solid fa-arrow-down text-2xl"></i></div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="text-center relative">
+                        <div class="w-24 h-24 mx-auto bg-white border-4 border-brand-100 rounded-full flex items-center justify-center text-4xl font-black text-brand-500 mb-6 shadow-sm">
+                            3
+                        </div>
+                        <h4 class="text-xl font-bold text-dark mb-3">Чистый монтаж</h4>
+                        <p class="text-slate-600 text-sm">В назначенный день доставляем технику и выполняем монтаж с использованием пылесоса.</p>
+                        <!-- Arrow for Mobile -->
+                        <div class="lg:hidden text-slate-300 mt-6"><i class="fa-solid fa-arrow-down text-2xl"></i></div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="text-center relative">
+                        <div class="w-24 h-24 mx-auto bg-brand-500 border-4 border-brand-200 rounded-full flex items-center justify-center text-4xl font-black text-white mb-6 shadow-md shadow-brand-500/30">
+                            4
+                        </div>
+                        <h4 class="text-xl font-bold text-dark mb-3">Приемка и гарантия</h4>
+                        <p class="text-slate-600 text-sm">Вакуумируем трассу, запускаем систему. Выдаем акт, чек и гарантийный талон.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. СКАЧАТЬ ПРАЙС-ЛИСТ (ЛИДМАГНИТ) -->
+    <section class="py-16 md:py-24 bg-brand-50" id="pricelist">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row">
+                <!-- Visual Left -->
+                <div class="bg-dark md:w-5/12 p-10 flex flex-col items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+                    
+                    <div class="relative z-10 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
+                        <!-- Mockup of PDF -->
+                        <div class="w-48 h-64 bg-white rounded-lg shadow-2xl p-4 flex flex-col">
+                            <div class="w-8 h-8 bg-brand-500 text-white rounded flex items-center justify-center mb-4"><i class="fa-solid fa-file-pdf"></i></div>
+                            <div class="w-3/4 h-2 bg-slate-200 rounded mb-2"></div>
+                            <div class="w-full h-2 bg-slate-200 rounded mb-2"></div>
+                            <div class="w-5/6 h-2 bg-slate-200 rounded mb-6"></div>
+                            
+                            <div class="flex-grow flex flex-col gap-2">
+                                <div class="w-full flex justify-between border-b border-slate-100 pb-1">
+                                    <div class="w-1/2 h-1.5 bg-slate-200 rounded"></div>
+                                    <div class="w-1/4 h-1.5 bg-slate-300 rounded"></div>
+                                </div>
+                                <div class="w-full flex justify-between border-b border-slate-100 pb-1">
+                                    <div class="w-2/3 h-1.5 bg-slate-200 rounded"></div>
+                                    <div class="w-1/4 h-1.5 bg-slate-300 rounded"></div>
+                                </div>
+                                <div class="w-full flex justify-between border-b border-slate-100 pb-1">
+                                    <div class="w-1/2 h-1.5 bg-slate-200 rounded"></div>
+                                    <div class="w-1/4 h-1.5 bg-slate-300 rounded"></div>
+                                </div>
+                            </div>
+                            <div class="text-[8px] text-center text-slate-400 mt-4">Прайс-лист 2026</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Right -->
+                <div class="p-10 md:w-7/12 flex flex-col justify-center">
+                    <h3 class="text-2xl md:text-3xl font-bold text-dark mb-4">Скачать полный прайс-лист</h3>
+                    <p class="text-slate-600 mb-8">Актуальные цены на монтаж, обслуживание и каталог оборудования (сплит-системы) в формате PDF.</p>
+                    
+                    <form onsubmit="submitForm(event, 'Скачивание прайса')" class="flex flex-col gap-4">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fa-brands fa-telegram text-slate-400"></i>
+                            </div>
+                            <input type="text" placeholder="Введите номер телефона или @telegram" required class="w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all text-dark placeholder-slate-400">
+                        </div>
+                        <button type="submit" class="btn-glow w-full bg-accent-500 hover:bg-accent-600 text-white font-bold py-4 rounded-xl transition-colors shadow-md flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                            Скачать файл (PDF)
+                            <i class="fa-solid fa-download"></i>
+                        </button>
+                        <p class="text-xs text-slate-400 text-center mt-2">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. ПОДВАЛ И ФОРМА ЗАЯВКИ -->
+    <footer class="bg-dark pt-32 pb-12 relative mt-40">
+        <!-- Overlapping Main Form -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl px-4 z-20">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-slate-100">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl md:text-3xl font-bold text-dark mb-2">Оставьте заявку на расчет или монтаж</h2>
+                    <p class="text-slate-500">Мы свяжемся с вами в течение рабочего времени для уточнения деталей.</p>
+                </div>
+                
+                <form onsubmit="submitForm(event, 'Главная форма')" class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Ваше имя</label>
+                        <input type="text" placeholder="Иван Иванов" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Телефон</label>
+                        <input type="tel" placeholder="+7 (999) 000-00-00" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none">
+                    </div>
+                    <div class="md:col-span-2 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between mt-2">
+                        <div class="flex-grow w-full md:w-auto">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Где вам удобнее получить ответ?</label>
+                            <select class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none text-slate-700 appearance-none">
+                                <option>Звонок по телефону</option>
+                                <option>Написать в WhatsApp</option>
+                                <option>Написать в Telegram</option>
+                            </select>
+                        </div>
+                        <div class="w-full md:w-auto md:self-end">
+                            <button type="submit" class="btn-glow w-full md:w-auto bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-10 rounded-xl transition-colors shadow-md text-lg transform hover:-translate-y-1">
+                                Отправить заявку
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 md:mt-24">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-slate-800 pb-12 mb-8">
+                
+                <!-- Contacts -->
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-8 h-8 bg-brand-500 rounded text-white flex items-center justify-center"><i class="fa-solid fa-wind"></i></div>
+                        <span class="font-bold text-xl text-white">ПрофиКлимат</span>
+                    </div>
+                    <p class="text-slate-400 mb-6 text-sm">Профессиональный монтаж и обслуживание климатической техники в вашем городе.</p>
+                    <div class="space-y-4">
+                        <a href="tel:+79001234567" class="flex items-center gap-3 text-white hover:text-brand-400 transition">
+                            <i class="fa-solid fa-phone text-slate-500"></i>
+                            <span class="font-medium text-lg">+7 (900) 123-45-67</span>
+                        </a>
+                        <a href="mailto:info@profiklimat.ru" class="flex items-center gap-3 text-slate-400 hover:text-white transition text-sm">
+                            <i class="fa-solid fa-envelope text-slate-500"></i>
+                            info@profiklimat.ru
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Messengers & Links -->
+                <div>
+                    <h4 class="text-white font-bold mb-6">Быстрая связь</h4>
+                    <div class="flex flex-col gap-3 mb-8">
+                        <a href="#" class="flex items-center gap-3 text-slate-300 hover:text-white transition w-max">
+                            <div class="w-8 h-8 rounded-full bg-[#229ED9] flex items-center justify-center text-white"><i class="fa-brands fa-telegram"></i></div>
+                            Написать в Telegram
+                        </a>
+                        <a href="#" class="flex items-center gap-3 text-slate-300 hover:text-white transition w-max">
+                            <div class="w-8 h-8 rounded-full bg-[#25D366] flex items-center justify-center text-white"><i class="fa-brands fa-whatsapp"></i></div>
+                            Написать в WhatsApp
+                        </a>
+                    </div>
+                    <div class="text-slate-500 text-sm space-y-2">
+                        <p>ИП Смирнов А.В.</p>
+                        <p>ИНН: 123456789012</p>
+                    </div>
+                </div>
+
+                <!-- Map Placeholder -->
+                <div>
+                    <h4 class="text-white font-bold mb-6">Зона обслуживания</h4>
+                    <div class="w-full h-40 bg-slate-800 rounded-xl overflow-hidden border border-slate-700 relative flex items-center justify-center">
+                        <div class="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=600')] bg-cover bg-center"></div>
+                        <div class="z-10 text-center">
+                            <i class="fa-solid fa-location-dot text-brand-500 text-3xl mb-2 block drop-shadow-md"></i>
+                            <span class="text-sm text-white font-medium drop-shadow-md">Работаем по городу<br>и области до 50 км</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
+                <p>&copy; 2026 ПрофиКлимат. Все права защищены.</p>
+                <a href="#" class="hover-underline hover:text-white transition">Политика конфиденциальности</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Modal (replaces alert) -->
+    <div id="customModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-dark/60 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300 relative" id="modalContent">
+            <!-- Close btn -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-dark transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                    <i class="fa-regular fa-circle-check"></i>
+                </div>
+                <h3 class="text-xl font-bold text-dark mb-2" id="modalTitle">Заявка принята</h3>
+                <p class="text-slate-500 text-sm">Спасибо! Мы свяжемся с вами в ближайшее время по указанным контактам.</p>
+            </div>
+            
+            <button onclick="closeModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-dark font-medium py-3 rounded-xl transition">
+                Закрыть окно
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        // Modal Logic
+        const modal = document.getElementById('customModal');
+        const modalContent = document.getElementById('modalContent');
+        const modalTitle = document.getElementById('modalTitle');
+
+        function openModal(titleText = 'Заявка принята') {
+            // modalTitle.innerText = titleText; // We keep it generic success for form submissions
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Small delay to allow display block to apply before transition
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300); // match duration
+        }
+
+        function submitForm(event, source) {
+            event.preventDefault();
+            // In a real app, here you would send data to server via fetch
+            console.log(`Форма отправлена из: ${source}`);
+            openModal();
+            event.target.reset(); // Clear form
+        }
+
+        // Close modal on click outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Header scroll effect
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-md', 'py-0');
+                header.classList.remove('py-2');
+            } else {
+                header.classList.remove('shadow-md', 'py-0');
+                header.classList.add('py-2');
+            }
+        });
+    </script>
+</body>
+</html>
